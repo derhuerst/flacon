@@ -1,0 +1,18 @@
+{
+	"name":              "flacon",
+	"description":       "A hyperminimal dependency injection framework.",
+	"version":           "0.1.0",
+	"main":              "index.js",
+	"files":             ["index.js", "readme.md"],
+	"keywords":          ["di", "dependency", "injection", "micro", "ioc"],
+	"author":            "Jannis R <mail@jannisr.de>",
+	"homepage":          "https://github.com/derhuerst/flacon",
+	"repository":        "git://github.com/derhuerst/flacon.git",
+	"license":           "ISC",
+	"dependencies": {
+	},
+	"devDependencies": {
+	},
+	"scripts": {
+	}
+}
