@@ -2,9 +2,11 @@ var is = require('is');
 
 
 
+// A dependency injection container, holding all modules, mocks and dependencies.
 var Container = function () {
 
-	var modules = {}, notCached = {};
+	var modules = {},
+	notCached = {}; // `{} is …` is never true.
 
 
 
@@ -12,14 +14,17 @@ var Container = function () {
 		var module, deps;
 
 		if (!is.string(id)) throw new Error('`id` must be a string.');
-		if (!is.object(mocks)) mocks = {};
+		if (!is.object(mocks)) mocks = {}; // `mocks` is optional
 
 		if (!modules[id]) throw new Error(id + ' has not been registered.');
 		else module = modules[id];
 
 		if (module.cache === notCached) {
+			// merge dependencies and mocks
 			deps = module.deps.map(function (id) {
 				var dep = load(id);
+				// For greater flexibility, the mocks are being called with the
+				// dependency. They can then manipulate it or return something entirely new.
 				if (mocks.hasOwnProperty(id)) return mocks[id](dep);
 				else return dep;
 			});
@@ -33,7 +38,7 @@ var Container = function () {
 
 	var publish = function (id, deps, factory) {
 		if (!is.string(id)) throw new Error('`id` must be a string.');
-		if (arguments.length === 2) {
+		if (arguments.length === 2) {  // `deps` is optional
 			factory = deps;
 			deps = [];
 		}
@@ -46,6 +51,7 @@ var Container = function () {
 			cache:   notCached
 		};
 
+		// To make publishing *and* exporting a factory easier, we return it here.
 		return factory;
 	};
 
