@@ -12,7 +12,14 @@
 	"dependencies": {
 	},
 	"devDependencies": {
+	    "coffee-script": "^1.10",
+	    "mocha":         "^2.3",
+	    "is":            "^3.1",
+	    "sinon":         "^1.17"
 	},
 	"scripts": {
+	    "test":          "mocha -R min --compilers coffee:coffee-script/register test/index.coffee",
+	    "test:watch":    "mocha -R min -w --compilers coffee:coffee-script/register test/index.coffee",
+	    "prepublish":      "npm test"
 	}
 }
