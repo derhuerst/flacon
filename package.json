@@ -9,9 +9,6 @@
 	"homepage":          "https://github.com/derhuerst/flacon",
 	"repository":        "git://github.com/derhuerst/flacon.git",
 	"license":           "ISC",
-	"dependencies": {
-	    "is":            "^3.1"
-	},
 	"devDependencies": {
 	    "coffee-script": "^1.10",
 	    "mocha":         "^2.3",

@@ -1,7 +1,3 @@
-var is = require('is');
-
-
-
 // A dependency injection container, holding all modules, mocks and dependencies.
 var Container = function () {
 
@@ -13,8 +9,9 @@ var Container = function () {
 	var load = function (id, mocks) {
 		var module, deps;
 
-		if (!is.string(id)) throw new Error('`id` must be a string.');
-		if (!is.object(mocks)) mocks = {}; // `mocks` is optional
+		if ('string' !== typeof id) throw new Error('`id` must be a string.');
+		// `mocks` is optional
+		if (Array.isArray(mocks) || 'object' !== typeof mocks) mocks = {};
 
 		if (!modules[id]) throw new Error(id + ' has not been registered.');
 		else module = modules[id];
@@ -37,12 +34,12 @@ var Container = function () {
 
 
 	var publish = function (id, deps, factory) {
-		if (!is.string(id)) throw new Error('`id` must be a string.');
+		if ('string' !== typeof id) throw new Error('`id` must be a string.');
 		if (arguments.length === 2) {  // `deps` is optional
 			factory = deps;
 			deps = [];
 		}
-		if (!is.fn(factory)) throw new Error('`factory` must be a function.');
+		if ('function' !== typeof factory) throw new Error('`factory` must be a function.');
 
 		if (modules[id]) throw new Error(id + ' has already been registered.');
 		else modules[id] = {
