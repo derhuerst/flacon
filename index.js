@@ -1,5 +1,5 @@
 // A dependency injection container, holding all modules, mocks and dependencies.
-var Container = function () {
+var Flacon = function () {
 
 	var modules = {},
 	notCached = {}; // `{} is …` is never true.
@@ -60,4 +60,4 @@ var Container = function () {
 
 
 
-module.exports = Container;
+if (module) module.exports = Flacon;

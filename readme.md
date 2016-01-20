@@ -42,9 +42,9 @@ This looks all good. But when testing `bar.js`, **mocking `foo.js` is really dif
 First, we create a new *flacon* container in `container.js`.
 
 ```js
-var Container = require('flacon');
+var Flacon = require('flacon');
 
-module.exports = new Container();
+module.exports = new Flacon();
 ```
 
 You can do two things with a container: `publish` a module and `load` a module.
