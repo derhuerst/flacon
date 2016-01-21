@@ -112,6 +112,31 @@ container.load('a');  // factory creates module again
 
 
 
+## API
+
+### `flacon(id, [mocks])`
+
+Loads and caches a module by `id`. Uses `mocks` instead of its dependencies. Returns the module.
+
+- `id`: The identifier, unique to the container.
+- `mocks`: A map of callbacks, mapped by module `id`. The return value of each callback will be the mock.
+
+### `flacon.publish(id, [deps], factory)`
+
+Registers a module by `id`. Returns the module's `factory`.
+
+- `id`: The identifier, unique to the container.
+- `deps`: An optional array of dependency `id`s. Their corresponding modules will be passed into `factory`.
+- `factory`: A function, taking the dependencies, that returns the module.
+
+### `flacon.flush()`
+
+Removes a module from the cache. Returns the container.
+
+- `id`: The identifier, unique to the container.
+
+
+
 ## Contributing
 
 If you **have a question**, **found a bug** or want to **propose a feature**, have a look at [the issues page](https://github.com/derhuerst/flacon/issues).
