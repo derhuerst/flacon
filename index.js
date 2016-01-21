@@ -33,6 +33,17 @@ var Flacon = function () {
 
 
 
+	var flush = function (id) {
+		if ('string' !== typeof id) throw new Error('`id` must be a string.');
+		if (!modules[id]) throw new Error(id + ' has not been registered.');
+
+		modules[id].cache = notCached;
+
+		return this;  // for method chaining
+	};
+
+
+
 	var publish = function (id, deps, factory) {
 		if ('string' !== typeof id) throw new Error('`id` must be a string.');
 		if (arguments.length === 2) {  // `deps` is optional
@@ -54,6 +65,7 @@ var Flacon = function () {
 
 
 
+	load.flush = flush;
 	load.publish = publish;
 	return load;
 };

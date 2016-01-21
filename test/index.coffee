@@ -78,7 +78,7 @@ describe 'flacon() – load a published module', ->
 		loadWithoutId = -> flacon()
 		assert.throws loadWithoutId, Error
 
-	it 'should throw an `Error` if no module `id`', ->
+	it 'should throw an `Error` if no module named `id`', ->
 		loadWithUnknownId = -> flacon 'b'
 		assert.throws loadWithUnknownId, Error
 
@@ -128,3 +128,31 @@ describe 'flacon() – load a published module', ->
 		flacon 'b', a: mock
 		assert factory.calledOnce, 'factory not called'
 		assert.deepEqual factory.firstCall.args, ['foobar']
+
+
+
+describe 'flacon.flush() – invalidate a published module\'s cache', ->
+
+	flacon = null
+	beforeEach -> flacon = Flacon()
+
+	it 'should throw an `Error` if no id passed', ->
+		loadWithoutId = -> flacon()
+		assert.throws loadWithoutId, Error
+
+	it 'should throw an `Error` if no module named `id`', ->
+		loadWithUnknownId = -> flacon 'b'
+		assert.throws loadWithUnknownId, Error
+
+	it 'should call the factory again after flushing', ->
+		spy = sinon.spy -> 'foo'
+		flacon.publish 'a', spy
+		flacon 'a'
+		flacon.flush 'a'
+		flacon 'a'
+		assert.strictEqual spy.callCount, 2
+
+	it 'should return `flacon`', ->
+		flacon.publish 'a', -> 'foo'
+		result = flacon.flush 'a'
+		assert.strictEqual result, flacon

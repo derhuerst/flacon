@@ -100,6 +100,17 @@ bar.value(); // -> 'baz bar'
 ```
 
 
+### `flush`
+
+To force *flacon* to call a module's factory again, use `flush`.
+
+```js
+container.load('a');  // factory creates module
+container.flush('a');
+container.load('a');  // factory creates module again
+```
+
+
 
 ## Contributing
 
