@@ -1,3 +1,5 @@
+'use strict';
+
 // A dependency injection container, holding all modules, mocks and dependencies.
 var Flacon = function () {
 
