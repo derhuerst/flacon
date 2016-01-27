@@ -28,8 +28,8 @@ var Flacon = function () {
 				if (mocks.hasOwnProperty(id)) return mocks[id](dep);
 				else return dep;
 			});
-			if (hasMocks) return module.factory.apply(null, deps);
-			module.cache = module.factory.apply(null, deps);
+			if (hasMocks) return module.factory.apply({}, deps);
+			module.cache = module.factory.apply({}, deps);
 		}
 
 		return module.cache;

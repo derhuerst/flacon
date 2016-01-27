@@ -114,6 +114,11 @@ describe 'flacon() – load a published module', ->
 		assert factory.calledOnce, 'dependencies not loaded'
 		assert.deepEqual factory.firstCall.args, ['foo', 'bar']
 
+	it 'should call the factory with `this` being the global scope', ->
+		factory = -> assert !(this is global), 'factory called with global scope'
+		flacon.publish 'b', factory
+		flacon 'b'
+
 	it 'should call a mock with the loaded dependency', ->
 		mock = sinon.spy()
 		flacon.publish 'b', ['a'], ->
