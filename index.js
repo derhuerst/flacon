@@ -18,7 +18,8 @@ var Flacon = function () {
 		if (!modules[id]) throw new Error(id + ' has not been registered.');
 		else module = modules[id];
 
-		if (module.cache === notCached) {
+		var hasMocks = Object.keys(mocks).length > 0;
+		if (module.cache === notCached || hasMocks) {
 			// merge dependencies and mocks
 			deps = module.deps.map(function (id) {
 				var dep = load(id);
@@ -27,6 +28,7 @@ var Flacon = function () {
 				if (mocks.hasOwnProperty(id)) return mocks[id](dep);
 				else return dep;
 			});
+			if (hasMocks) return module.factory.apply(null, deps);
 			module.cache = module.factory.apply(null, deps);
 		}
 

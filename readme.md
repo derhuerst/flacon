@@ -85,7 +85,7 @@ var bar = container('bar');
 bar.value(); // -> 'foo bar'
 ```
 
-During testing, we can easily **manipulate or mock a dependency**.
+During testing, we can easily **manipulate or mock a dependency**. Note that this loads the module without caching.
 
 ```js
 var container = require('./container');
@@ -116,7 +116,9 @@ container.load('a');  // factory creates module again
 
 ### `flacon(id, [mocks])`
 
-Loads and caches a module by `id`. Uses `mocks` instead of its dependencies. Returns the module.
+Loads a module by `id`. Returns the module.
+
+If `mocks` are passed, they will be used to instead of its dependencies. Otherwise the module will be cached.
 
 - `id`: The identifier, unique to the container.
 - `mocks`: A map of callbacks, mapped by module `id`. The return value of each callback will be the mock.

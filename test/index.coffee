@@ -129,6 +129,13 @@ describe 'flacon() – load a published module', ->
 		assert factory.calledOnce, 'factory not called'
 		assert.deepEqual factory.firstCall.args, ['foobar']
 
+	it 'should not cache the result if any mocks passed', ->
+		factory = sinon.spy()
+		flacon.publish 'b', ['a'], factory
+		flacon 'b', a: -> {}
+		flacon 'b', a: -> {}
+		assert.strictEqual factory.callCount, 2, 'factory not called exactly twice'
+
 
 
 describe 'flacon.flush() – invalidate a published module\'s cache', ->
