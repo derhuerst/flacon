@@ -22,7 +22,7 @@ var Flacon = function () {
 		if (module.cache === notCached || hasMocks) {
 			// merge dependencies and mocks
 			deps = module.deps.map(function (id) {
-				var dep = load(id);
+				var dep = load(id, mocks);
 				// For greater flexibility, the mocks are being called with the
 				// dependency. They can then manipulate it or return something entirely new.
 				if (mocks.hasOwnProperty(id)) return mocks[id](dep);

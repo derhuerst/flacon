@@ -134,6 +134,13 @@ describe 'flacon()', -> # load a published module
 		assert factory.calledOnce, 'factory not called'
 		assert.deepEqual factory.firstCall.args, ['foobar']
 
+	it 'should use the mock deeply', ->
+		mock = -> 'qux'
+		flacon.publish 'b', ['a'], (a) -> a + 'bar'
+		flacon.publish 'c', ['b'], (b) -> b + 'baz'
+		result = flacon 'c', a: mock
+		assert.deepEqual result, 'quxbarbaz' # instead of 'foobarbaz'
+
 	it 'should not cache the result if any mocks passed', ->
 		factory = sinon.spy()
 		flacon.publish 'b', ['a'], factory
