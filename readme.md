@@ -37,19 +37,19 @@ module.exports = {
 This looks all good. But when testing `bar.js`, **mocking `foo.js` is really difficult** because it is a *private* dependency. *flacon*, on the other hand, forces you to explicitly declare all dependencies, making it easy to mock them.
 
 
-### `publish`
+### create a container
 
-First, we create a new *flacon* container in `container.js`.
+First, we create a new container in `container.js`. **On a container, you can [publish](#flaconpublishid-deps-factory) and [load](#flaconid-mocks) modules.**
 
 ```js
 var Flacon = require('flacon');
-
 module.exports = new Flacon();
 ```
 
-You can do two things with a container: `publish` a module and `load` a module.
 
-Let's publish `foo` first. We call the `publish` method with an **id** and a **factory function**.
+### publish modules
+
+Let's start with `foo.js`. We call the `publish` method with an **id** and a **factory function**.
 
 ```js
 var container = require('./container');
@@ -61,20 +61,20 @@ container.publish('foo', function () {
 });
 ```
 
-Moving on to `bar`, we define `foo` as a **dependency**. All dependencies get passed into the factory function.
+Moving on to `bar.js`, we define `foo` as a **dependency**. The result of `foo`'s factory will be passed into `bar`'s factory.
 
 ```js
 var container = require('./container');
 
 container.publish('bar', ['foo'], function (foo) {
 	return {
-		value: function () { return foo.value() + ' bar' }
+		value: function () { return foo.value() + 'bar' }
 	};
 });
 ```
 
 
-### `load`
+### load modules
 
 By simply calling the container with a module id, you will get the **return value of the factory function**.
 
@@ -82,21 +82,24 @@ By simply calling the container with a module id, you will get the **return valu
 var container = require('./container');
 
 var bar = container('bar');
-bar.value(); // -> 'foo bar'
+bar.value(); // -> 'foobar'
 ```
 
-During testing, we can easily **manipulate or mock a dependency**. Note that this loads the module without caching.
+
+### mock dependencies
+
+During testing, we can easily **manipulate or mock a dependency**. This will load every mocked module without caching.
 
 ```js
 var container = require('./container');
 
 var bar = container('bar', {
-	'a': function (a) {
-		a.value = function () { return 'baz' }
-		return a;
+	foo: function (foo) {
+		foo.value = function () { return 'baz' };
+		return foo;
 	}
 });
-bar.value(); // -> 'baz bar'
+bar.value(); // -> 'bazbar'
 ```
 
 
@@ -105,9 +108,9 @@ bar.value(); // -> 'baz bar'
 To force *flacon* to call a module's factory again, use `flush`.
 
 ```js
-container.load('a');  // factory creates module
-container.flush('a');
-container.load('a');  // factory creates module again
+container.load('foo');  // factory creates module
+container.flush('foo');
+container.load('foo');  // factory creates module again
 ```
 
 
@@ -116,9 +119,9 @@ container.load('a');  // factory creates module again
 
 ### `flacon(id, [mocks])`
 
-Loads a module by `id`. Returns the module.
+Loads a module by `id`. Caches and returns the module.
 
-If `mocks` are passed, they will be used to instead of its dependencies. Otherwise the module will be cached.
+`mocks` is an object of mocking functions by id. Mocked dependencies will not be cached.
 
 - `id`: The identifier, unique to the container.
 - `mocks`: A map of callbacks, mapped by module `id`. The return value of each callback will be the mock.

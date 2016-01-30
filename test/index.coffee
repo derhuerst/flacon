@@ -8,7 +8,7 @@ Flacon =   require '../index.js'
 
 
 
-describe 'Flacon() – create a new container', ->
+describe 'Flacon()', -> # creates a new container
 
 	it 'should be a function', ->
 		assert _is.fn Flacon
@@ -37,7 +37,7 @@ describe 'Flacon() – create a new container', ->
 
 
 
-describe 'flacon.publish() – publish a module', ->
+describe 'flacon.publish()', -> # publish a module
 
 	flacon = null
 	beforeEach -> flacon = Flacon()
@@ -67,7 +67,7 @@ describe 'flacon.publish() – publish a module', ->
 
 
 
-describe 'flacon() – load a published module', ->
+describe 'flacon()', -> # load a published module
 
 	flacon = null
 	beforeEach ->
@@ -143,7 +143,7 @@ describe 'flacon() – load a published module', ->
 
 
 
-describe 'flacon.flush() – invalidate a published module\'s cache', ->
+describe 'flacon.flush()', -> # invalidate a published module\'s cache
 
 	flacon = null
 	beforeEach -> flacon = Flacon()
