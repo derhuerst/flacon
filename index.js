@@ -19,7 +19,7 @@ var Flacon = function () {
 		else module = modules[id];
 
 		var hasMocks = Object.keys(mocks).length > 0;
-		if (module.cache === notCached || hasMocks) {
+		if (module.cache === notCached || mocks[id]) {
 			// merge dependencies and mocks
 			deps = module.deps.map(function (id) {
 				var dep = load(id, mocks);

@@ -114,7 +114,7 @@ describe 'flacon()', -> # load a published module
 		assert factory.calledOnce, 'dependencies not loaded'
 		assert.deepEqual factory.firstCall.args, ['foo', 'bar']
 
-	it 'should call the factory with `this` being the global scope', ->
+	it 'should not call the factory with `this` being the global scope', ->
 		factory = -> assert !(this is global), 'factory called with global scope'
 		flacon.publish 'b', factory
 		flacon 'b'
@@ -147,6 +147,14 @@ describe 'flacon()', -> # load a published module
 		flacon 'b', a: -> {}
 		flacon 'b', a: -> {}
 		assert.strictEqual factory.callCount, 2, 'factory not called exactly twice'
+
+	it 'should cache dependencies not being mocked', ->
+		factory = sinon.spy -> 'this is b'
+		flacon.publish 'b', factory
+		flacon.publish 'c', ['b'], -> 'this is c'
+		flacon 'b'
+		flacon 'c', a: -> 'this is a'
+		assert.strictEqual factory.callCount, 1
 
 
 
