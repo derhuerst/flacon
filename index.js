@@ -18,8 +18,9 @@ function Flacon () {
 		hasMocks = Object.keys(mocks).length > 0;
 		if (module.cache === notCached || mocks[id]) {
 
+			deps = Array.isArray(module.factory.deps) ? module.factory.deps : [];
 			// merge dependencies and mocks
-			deps = module.deps.map(function (id) {
+			deps = deps.map(function (id) {
 				var dep = load(id, mocks);
 				// For greater flexibility, the mocks are being called with the
 				// dependency. They can then manipulate it or return something entirely new.
@@ -45,16 +46,12 @@ function Flacon () {
 
 
 
-	load.publish = function (id, deps, factory) {
+	load.publish = function (id, factory) {
 		if ('string' !== typeof id) throw new Error('`id` must be a string.');
-		if (arguments.length === 2) {  // `deps` is optional
-			factory = deps;
-			deps = [];
-		}
 		if ('function' !== typeof factory) throw new Error('`factory` must be a function.');
 
 		if (modules[id]) throw new Error(id + ' has already been registered.');
-		else modules[id] = {deps: deps, factory: factory, cache: notCached};
+		else modules[id] = {factory: factory, cache: notCached};
 
 		return factory; // To make publishing *and* exporting a factory easier.
 	};

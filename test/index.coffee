@@ -100,16 +100,19 @@ describe 'flacon()', -> # load a published module
 		assert.strictEqual factory.callCount, 1, 'factory not called exactly once'
 
 	it 'should load all dependencies before', ->
-		factory = sinon.spy()
-		flacon.publish 'c', factory
-		flacon.publish 'b', ['c'], ->
-		flacon 'b'
-		assert factory.calledOnce, 'dependency not loaded'
+		factoryForB = sinon.spy()
+		flacon.publish 'b', factoryForB
+		factoryForC = ->
+		factoryForC.deps = ['b']
+		flacon.publish 'c', factoryForC
+		flacon 'c'
+		assert factoryForB.calledOnce, 'dependency not loaded'
 
 	it 'should call the factory with the loaded dependencies', ->
-		factory = sinon.spy()
 		flacon.publish 'b', -> 'bar'
-		flacon.publish 'c', ['a', 'b'], factory
+		factory = sinon.spy()
+		factory.deps = ['a', 'b']
+		flacon.publish 'c', factory
 		flacon 'c'
 		assert factory.calledOnce, 'dependencies not loaded'
 		assert.deepEqual factory.firstCall.args, ['foo', 'bar']
@@ -121,7 +124,9 @@ describe 'flacon()', -> # load a published module
 
 	it 'should call a mock with the loaded dependency', ->
 		mock = sinon.spy()
-		flacon.publish 'b', ['a'], ->
+		factory = ->
+		factory.deps = ['a']
+		flacon.publish 'b', factory
 		flacon 'b', a: mock
 		assert mock.calledOnce, 'mock not called'
 		assert.deepEqual mock.firstCall.args, ['foo']
@@ -129,32 +134,40 @@ describe 'flacon()', -> # load a published module
 	it 'should use the mock as dependency', ->
 		mock = sinon.spy (module) -> module + 'bar'
 		factory = sinon.spy()
-		flacon.publish 'b', ['a'], factory
+		factory.deps = ['a']
+		flacon.publish 'b', factory
 		flacon 'b', a: mock
 		assert factory.calledOnce, 'factory not called'
 		assert.deepEqual factory.firstCall.args, ['foobar']
 
 	it 'should use the mock deeply', ->
 		mock = -> 'qux'
-		flacon.publish 'b', ['a'], (a) -> a + 'bar'
-		flacon.publish 'c', ['b'], (b) -> b + 'baz'
+		factoryForB = (a) -> a + 'bar'
+		factoryForB.deps = ['a']
+		factoryForC = (a) -> a + 'baz'
+		factoryForC.deps = ['b']
+		flacon.publish 'b', factoryForB
+		flacon.publish 'c', factoryForC
 		result = flacon 'c', a: mock
 		assert.deepEqual result, 'quxbarbaz' # instead of 'foobarbaz'
 
 	it 'should not cache the result if any mocks passed', ->
 		factory = sinon.spy()
-		flacon.publish 'b', ['a'], factory
+		factory.deps = ['a']
+		flacon.publish 'b', factory
 		flacon 'b', a: -> {}
 		flacon 'b', a: -> {}
 		assert.strictEqual factory.callCount, 2, 'factory not called exactly twice'
 
 	it 'should cache dependencies not being mocked', ->
-		factory = sinon.spy -> 'this is b'
-		flacon.publish 'b', factory
-		flacon.publish 'c', ['b'], -> 'this is c'
+		factoryForB = sinon.spy -> 'this is b'
+		flacon.publish 'b', factoryForB
+		factoryForC = -> 'this is c'
+		factoryForC.deps = ['b']
+		flacon.publish 'c', factoryForC
 		flacon 'b'
 		flacon 'c', a: -> 'this is a'
-		assert.strictEqual factory.callCount, 1
+		assert.strictEqual factoryForB.callCount, 1
 
 
 
