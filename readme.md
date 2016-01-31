@@ -1,6 +1,10 @@
 # flacon
 
-*flacon* is a dependency injection container with a clean and tiny API. It helps you to test your components individually.
+***flacon* is a dependency injection container** with a clean and tiny API that helps you to test your components individually.
+
+- **Flexible** – It does *not* care about what a module factory returns.
+- **Unopinionated** – It does *not* interfere with `require` calls.
+- **Simple** – Have a look at [the source code](index.js).
 
 [![build status](https://img.shields.io/travis/derhuerst/flacon.svg)](https://travis-ci.org/derhuerst/flacon)
 [![dependency status](https://img.shields.io/david/derhuerst/flacon.svg)](https://david-dm.org/derhuerst/flacon#info=dependencies)
