@@ -15,22 +15,25 @@ function Flacon () {
 		if (!modules[id]) throw new Error(id + ' has not been registered.');
 		else module = modules[id];
 
-		hasMocks = Object.keys(mocks).length > 0;
-		if (module.cache === notCached || mocks[id]) {
+		deps = Array.isArray(module.factory.deps) ? module.factory.deps : [];
+		hasMocks = Object.keys(mocks).some(function (mock) {
+			return deps.indexOf(mock) >= 0;
+		});
 
-			deps = Array.isArray(module.factory.deps) ? module.factory.deps : [];
-			// merge dependencies and mocks
-			deps = deps.map(function (id) {
+		if (hasMocks) {
+			deps = deps.map(function (id) { // merge dependencies and mocks
 				var dep = load(id, mocks);
 				// For greater flexibility, the mocks are being called with the
 				// dependency. They can then manipulate it or return something entirely new.
-				if (mocks.hasOwnProperty(id)) return mocks[id](dep);
-				else return dep;
+				return mocks.hasOwnProperty(id) ? mocks[id](dep) : dep;
 			});
+			return module.factory.apply({}, deps);
 
-			if (hasMocks) return module.factory.apply({}, deps);
+		} else if (module.cache === notCached) {
+			deps = deps.map(function (id) {return load(id, mocks)});
 			module.cache = module.factory.apply({}, deps);
 		}
+
 		return module.cache;
 	};
 

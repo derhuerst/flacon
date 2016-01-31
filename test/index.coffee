@@ -151,7 +151,7 @@ describe 'flacon()', -> # load a published module
 		result = flacon 'c', a: mock
 		assert.deepEqual result, 'quxbarbaz' # instead of 'foobarbaz'
 
-	it 'should not cache the result if any mocks passed', ->
+	it 'should not cache the result if any dependency mocked', ->
 		factory = sinon.spy()
 		factory.deps = ['a']
 		flacon.publish 'b', factory

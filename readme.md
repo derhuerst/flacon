@@ -108,6 +108,8 @@ var bar = container('bar', {
 bar.value(); // -> 'bazbar'
 ```
 
+*Note: In a mock function, make sure to never manipulate given module, always return a new one!*
+
 
 ### `flush`
 
