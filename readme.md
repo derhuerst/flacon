@@ -70,11 +70,13 @@ Moving on to `bar.js`, we define `foo` as a **dependency**. The result of `foo`'
 ```js
 var container = require('./container');
 
-container.publish('bar', ['foo'], function (foo) {
+var factory = function (foo) {
 	return {
 		value: function () { return foo.value() + 'bar' }
 	};
-});
+};
+factory.deps = ['foo'];
+container.publish('bar', factory);
 ```
 
 
@@ -130,12 +132,11 @@ Loads a module by `id`. Caches and returns the module.
 - `id`: The identifier, unique to the container.
 - `mocks`: A map of callbacks, mapped by module `id`. The return value of each callback will be the mock.
 
-### `flacon.publish(id, [deps], factory)`
+### `flacon.publish(id, factory)`
 
-Registers a module by `id`. Returns the module's `factory`.
+Registers a module by `id`. Reads the module's dependencies from `factory.deps`. Returns the module's `factory`.
 
 - `id`: The identifier, unique to the container.
-- `deps`: An optional array of dependency `id`s. Their corresponding modules will be passed into `factory`.
 - `factory`: A function, taking the dependencies, that returns the module.
 
 ### `flacon.flush()`
