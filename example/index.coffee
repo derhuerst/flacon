@@ -3,8 +3,9 @@ container = require './container'
 
 bar = container 'bar'
 
+mockedFoo = read: -> 'qux'
 barUnderTest = container 'bar',
-	foo: (foo) -> read: -> 'qux'
+	foo: (foo) -> mockedFoo
 
 assert.strictEqual bar.read(), 'foobar'
 assert.strictEqual barUnderTest.read(), 'quxbar'

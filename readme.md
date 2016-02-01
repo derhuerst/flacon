@@ -4,7 +4,7 @@
 
 - **Flexible** – It does *not* care about what a module factory returns.
 - **Unopinionated** – It does *not* interfere with `require` calls.
-- **Simple** – Have a look at [the source code](index.js).
+- **Simple** – [Less than 100 lines of code](index.js).
 
 [![build status](https://img.shields.io/travis/derhuerst/flacon.svg)](https://travis-ci.org/derhuerst/flacon)
 [![dependency status](https://img.shields.io/david/derhuerst/flacon.svg)](https://david-dm.org/derhuerst/flacon#info=dependencies)
