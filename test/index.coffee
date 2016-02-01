@@ -131,6 +131,14 @@ describe 'flacon()', -> # load a published module
 		assert mock.calledOnce, 'mock not called'
 		assert.deepEqual mock.firstCall.args, ['foo']
 
+	it 'should throw an error if a mock is not a function', ->
+		mock = 'foo'
+		factory = ->
+		factory.deps = ['a']
+		flacon.publish 'b', factory
+		loadWithInvalidMock = -> flacon 'b', a: mock
+		assert.throws loadWithInvalidMock
+
 	it 'should use the mock as dependency', ->
 		mock = sinon.spy (module) -> module + 'bar'
 		factory = sinon.spy()

@@ -23,6 +23,8 @@ function Flacon () {
 				var dep = load(id, mocks)
 				// For greater flexibility, the mocks are being called with the
 				// dependency. They can then manipulate it or return something entirely new.
+				if ('function' !== typeof mocks[id])
+					throw new Error('Mock for `' + id + '` must be a function.')
 				return mocks.hasOwnProperty(id) ? mocks[id](dep) : dep
 			});
 			return module.factory.apply({}, deps)
