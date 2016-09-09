@@ -1,4 +1,4 @@
-# flacon
+# flacon 💉
 
 ***flacon* is a dependency injection container** with a clean and tiny API that helps you to test your components individually.
 
@@ -6,9 +6,11 @@
 - **Unopinionated** – It does *not* interfere with `require` calls.
 - **Simple** – [Less than 100 lines of code](index.js).
 
+[![npm version](https://img.shields.io/npm/v/flacon.svg)](https://www.npmjs.com/package/flacon)
 [![build status](https://img.shields.io/travis/derhuerst/flacon.svg)](https://travis-ci.org/derhuerst/flacon)
 [![dependency status](https://img.shields.io/david/derhuerst/flacon.svg)](https://david-dm.org/derhuerst/flacon#info=dependencies)
 [![dev dependency status](https://img.shields.io/david/dev/derhuerst/flacon.svg)](https://david-dm.org/derhuerst/flacon#info=devDependencies)
+![ISC-licensed](https://img.shields.io/github/license/derhuerst/flacon.svg)
 
 
 ## Installing
