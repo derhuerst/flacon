@@ -13,11 +13,11 @@
 		"tape": "^4.6",
 		"is": "^3.1",
 		"tap-min": "^1.1",
-		"uglify-js": "^2.6"
+		"uglify-js": "mishoo/UglifyJS2#harmony"
 	},
 	"scripts": {
 		"test": "node test.js | tap-min",
 		"prepublish": "npm test",
-		"dist":          "uglifyjs index.js -cm --preamble '// github.com/derhuerst/flacon' -o index.min.js"
+		"dist": "uglifyjs -mc --screw-ie8 --preamble '// github.com/derhuerst/flacon' -- index.js > index.min.js"
 	}
 }
