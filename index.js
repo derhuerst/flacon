@@ -1,36 +1,34 @@
 'use strict'
 
 // A dependency injection container, holding all modules, mocks and dependencies.
-function Flacon () {
-	var modules = {}, notCached = {} // `{} is …` is never true.
+const Flacon = function () {
+	const modules = {}; const notCached = {} // `{} === …` is never true.
 
 
 
-	var load = function (id, mocks) { // `mocks` is optional
+	const load = (id, mocks) => { // `mocks` is optional
 		if ('string' !== typeof id) throw new Error('`id` must be a string.')
 		if (Array.isArray(mocks) || 'object' !== typeof mocks) mocks = {}
 
 		if (!modules[id]) throw new Error(id + ' has not been registered.')
-		var module = modules[id]
+		const module = modules[id]
 
-		var deps = Array.isArray(module.factory.deps) ? module.factory.deps : []
-		var hasMocks = Object.keys(mocks).some(function (mock) {
-			return deps.indexOf(mock) >= 0
-		})
+		let deps = Array.isArray(module.factory.deps) ? module.factory.deps : []
+		const hasMocks = Object.keys(mocks).some((mock) => deps.indexOf(mock) >= 0)
 
 		if (hasMocks) {
-			deps = deps.map(function (id) { // merge dependencies and mocks
-				var dep = load(id, mocks)
+			deps = deps.map((id) => { // merge dependencies and mocks
+				const dep = load(id, mocks)
 				// For greater flexibility, the mocks are being called with the
 				// dependency. They can then manipulate it or return something entirely new.
 				if ('function' !== typeof mocks[id])
 					throw new Error('Mock for `' + id + '` must be a function.')
 				return mocks.hasOwnProperty(id) ? mocks[id](dep) : dep
-			});
+			})
 			return module.factory.apply({}, deps)
 
 		} else if (module.cache === notCached) {
-			deps = deps.map(function (id) {return load(id, mocks)})
+			deps = deps.map((id) => load(id, mocks))
 			module.cache = module.factory.apply({}, deps)
 		}
 
@@ -39,17 +37,17 @@ function Flacon () {
 
 
 
-	load.flush = function (id) {
+	load.flush = (id) => {
 		if ('string' !== typeof id) throw new Error('`id` must be a string.')
 		if (!modules[id]) throw new Error(id + ' has not been registered.')
 
 		modules[id].cache = notCached
-		return this  // for method chaining
+		return load  // for method chaining
 	}
 
 
 
-	load.publish = function (id, factory) {
+	load.publish = (id, factory) => {
 		if ('string' !== typeof id) throw new Error('`id` must be a string.')
 		if ('function' !== typeof factory) throw new Error('`factory` must be a function.')
 

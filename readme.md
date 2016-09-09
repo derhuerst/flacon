@@ -24,18 +24,18 @@ Imagine you have a **service `foo.js`**.
 
 ```js
 module.exports = {
-	value: function () { return 'foo' }
-};
+	value: () => 'foo'
+}
 ```
 
 Now you want another **service `bar.js` that uses `foo.js`**.
 
 ```js
-var foo = require('./foo');
+const foo = require('./foo')
 
 module.exports = {
-	value: function () { return foo.value() + 'bar' }
-};
+	value: () => foo.value() + 'bar'
+}
 ```
 
 This looks all good. But when testing `bar.js`, **mocking `foo.js` is really difficult** because it is a *private* dependency. *flacon*, on the other hand, forces you to explicitly declare all dependencies, making it easy to mock them.
@@ -46,8 +46,8 @@ This looks all good. But when testing `bar.js`, **mocking `foo.js` is really dif
 First, we create a new container in `container.js`. **On a container, you can [publish](#flaconpublishid-deps-factory) and [load](#flaconid-mocks) modules.**
 
 ```js
-var Flacon = require('flacon');
-module.exports = new Flacon();
+const Flacon = require('flacon')
+module.exports = new Flacon()
 ```
 
 
@@ -56,27 +56,23 @@ module.exports = new Flacon();
 Let's start with `foo.js`. We call the `publish` method with an **id** and a **factory function**.
 
 ```js
-var container = require('./container');
+const container = require('./container');
 
-container.publish('foo', function () {
-	return {
-		value: function () { return 'foo' }
-	};
-});
+container.publish('foo', () => ({
+	value: () => 'foo'
+}))
 ```
 
 Moving on to `bar.js`, we define `foo` as a **dependency**. The result of `foo`'s factory will be passed into `bar`'s factory.
 
 ```js
-var container = require('./container');
+const container = require('./container')
 
-var factory = function (foo) {
-	return {
-		value: function () { return foo.value() + 'bar' }
-	};
-};
-factory.deps = ['foo'];
-container.publish('bar', factory);
+const factory = (foo) => ({
+	value: () => foo.value() + 'bar'
+})
+factory.deps = ['foo']
+container.publish('bar', factory)
 ```
 
 
@@ -85,10 +81,10 @@ container.publish('bar', factory);
 By simply calling the container with a module id, you will get the **return value of the factory function**.
 
 ```js
-var container = require('./container');
+const container = require('./container')
 
-var bar = container('bar');
-bar.value(); // -> 'foobar'
+const bar = container('bar')
+bar.value() // -> 'foobar'
 ```
 
 
@@ -97,15 +93,14 @@ bar.value(); // -> 'foobar'
 During testing, we can easily **manipulate or mock a dependency**. This will load every mocked module without caching.
 
 ```js
-var container = require('./container');
+const container = require('./container')
 
-var bar = container('bar', {
-	foo: function (foo) {
-		foo.value = function () { return 'baz' };
-		return foo;
-	}
-});
-bar.value(); // -> 'bazbar'
+const bar = container('bar', {
+	foo: (foo) => ({
+		value: () => 'baz'
+	})
+})
+bar.value() // -> 'bazbar'
 ```
 
 *Note: In a mock function, make sure to never manipulate given module, always return a new one!*
@@ -116,9 +111,9 @@ bar.value(); // -> 'bazbar'
 To force *flacon* to call a module's factory again, use `flush`.
 
 ```js
-container.load('foo');  // factory creates module
-container.flush('foo');
-container.load('foo');  // factory creates module again
+container.load('foo')  // factory creates module
+container.flush('foo')
+container.load('foo')  // factory creates module again
 ```
 
 
