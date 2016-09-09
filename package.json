@@ -10,16 +10,14 @@
 	"repository":        "git://github.com/derhuerst/flacon.git",
 	"license":           "ISC",
 	"devDependencies": {
-		"coffee-script": "^1.10",
-		"mocha":         "^2.3",
-		"is":            "^3.1",
-		"sinon":         "^1.17",
-		"uglify-js":     "^2.6"
+		"tape": "^4.6",
+		"is": "^3.1",
+		"tap-min": "^1.1",
+		"uglify-js": "^2.6"
 	},
 	"scripts": {
-		"test":          "mocha -R min --compilers coffee:coffee-script/register test/index.coffee",
-		"test:watch":    "mocha -R min -w --compilers coffee:coffee-script/register test/index.coffee",
-		"prepublish":    "npm test",
+		"test": "node test.js | tap-min",
+		"prepublish": "npm test",
 		"dist":          "uglifyjs index.js -cm --preamble '// github.com/derhuerst/flacon' -o index.min.js"
 	}
 }
