@@ -25,7 +25,7 @@ const Flacon = function () {
 					throw new Error('Mock for `' + id + '` must be a function.')
 				return mocks.hasOwnProperty(id) ? mocks[id](dep) : dep
 			})
-			return module.factory.apply({}, deps)
+			return module.factory.apply(Object.create(null), deps)
 
 		} else if (module.cache === notCached) {
 			deps = deps.map((id) => load(id, mocks))
