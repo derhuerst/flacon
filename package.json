@@ -12,7 +12,7 @@
 	"devDependencies": {
 		"tape": "^5.0.0",
 		"is": "^3.1",
-		"tap-min": "^1.1",
+		"tap-min": "^2.0.0",
 		"uglify-js": "mishoo/UglifyJS2#harmony"
 	},
 	"scripts": {
